@@ -3,6 +3,7 @@ title: "test-grades"
 author: "Kenza REDWANE"
 format: 
   html:
+  pdf:
     code-fold: true
 ---
 
@@ -52,8 +53,7 @@ Question 5:
 ```{r}
 students_per_group <- students |> count(group)
 ggplot(students_per_group, aes(x = factor(group), y = n)) +
-  geom_col(fill='steel blue') +
-  labs(title = "Number of students per group", x = "Group", y = "Number of students")
+  geom_col(fill='steel blue')
 ```
 
 Question 6:
@@ -64,18 +64,14 @@ arch_sculpture_avg <- grades |>
   summarise(avg_grade = mean(grade, na.rm = TRUE))
 
 ggplot(arch_sculpture_avg, aes(x = factor(group), y = avg_grade)) +
-  geom_col(fill="steel blue") +
-  labs(title = "Average of grades in Architecture and Sculpture per Group", x = "Group", y = "Average of grades")
+  geom_col(fill="steel blue") 
 ```
 
 Question 7: Comparison
 ```{r}
 ggplot(grades, aes(x = grade, fill = factor(semester))) +
   geom_density(alpha = 0.5) +
-  labs(title = "Distribution of grades per semester ", 
-       x = "Grades", 
-       y = "Dennsity", 
-       fill = "Semester")
+  labs(fill = "Semester")
 ```
 
 ### Attendance analysis
@@ -107,15 +103,91 @@ Question 10:
 distribution_martial_grades <- martial_grades |> 
   count(num_martial_grades)
 ggplot(distribution_martial_grades, aes(x = num_martial_grades, y = n)) +
-  geom_col(fill ='darkred') +
-  labs(title = "Distribution of grades in Martial Arts and Self-Defense", x = "Number of grades ", y = "Number of students")
-
+  geom_col(fill ='darkred')
+  
 ```
 
 Question 11:
 ```{r}
 ggplot(martial_grades, aes(x = factor(group), y = num_martial_grades)) +
-  geom_boxplot() +
-  labs(title = "Number of grades in Martial Arts and Self-Defense per group", x = "Group", y = "Number of de grades")
+  geom_boxplot() 
+
 ```
 
+## Grade Analysis
+
+Question 12: 
+```{r}
+avg_grades_per_course <- grades |> 
+  group_by(id, group, course) |> 
+  summarise(avg_grade = mean(grade, na.rm = TRUE)) |> 
+  ungroup() |>
+  pivot_wider(names_from = course, values_from = avg_grade)
+
+avg_grades_per_course |> 
+  select(id, group, starts_with("Agriculture"), starts_with("Architecture")) |> 
+  slice_head(n = 5)
+```
+
+Question 13: 
+```{r}
+ggplot(avg_grades_per_course, aes(x = `Traditional Medicine and Herbalism`, y = `Music and Dance`)) +
+  geom_point(color = "blue", alpha = 0.6) +
+  theme_minimal()
+```
+
+Question 14: Correlation between the average grades in astrology and divination & Architecture and Sculpture
+```{r}
+correlation_by_group <- avg_grades_per_course |>
+  group_by(group) |>
+  summarise(correlation = cor(`Astrology and Divination`, `Architecture and Sculpture`, use = "complete.obs"))
+
+correlation_by_group
+```
+
+Question 15: 
+```{r}
+strongest_corr_group <- correlation_by_group |> 
+  slice_max(abs(correlation), n = 1) |> 
+  pull(group)
+avg_grades_per_course |>
+  filter(group == strongest_corr_group) |>
+  ggplot(aes(x = `Astrology and Divination`, y = `Architecture and Sculpture`)) +
+  geom_point(color = "red") +
+
+  theme_minimal()
+```
+
+Question 16: 
+```{r}
+final_grades <- avg_grades_per_course |>
+  rowwise() |> 
+  mutate(final_grade = mean(c_across(starts_with("Agriculture"):`Traditional Medicine and Herbalism`), na.rm = TRUE)) |>
+  ungroup() |>
+  select(id, group, final_grade) |>
+  arrange(desc(final_grade))
+
+final_grades |> slice_head(n = 5)
+```
+
+Question 17: Study differences in final grades between groups
+```{r}
+ggplot(final_grades, aes(x = factor(group), y = final_grade)) +
+  geom_boxplot(fill = "lightblue") +
+  theme_minimal()
+```
+
+Question 18: 
+```{r}
+
+```
+
+Question 19: 
+```{r}
+
+```
+
+Question 20: 
+```{r}
+
+```
