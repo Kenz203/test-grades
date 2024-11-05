@@ -2,7 +2,7 @@
 title: "test-grades"
 author: "Kenza REDWANE"
 format: 
-  html:
+  html: 
     code-fold: true
 ---
 
@@ -52,9 +52,8 @@ Question 5:
 ```{r}
 students_per_group <- students |> count(group)
 ggplot(students_per_group, aes(x = factor(group), y = n)) +
-  geom_col(fill='steel blue')
+  geom_col(fill='sky blue')
 ```
-
 Question 6:
 ```{r}
 arch_sculpture_avg <- grades |> 
@@ -65,7 +64,20 @@ arch_sculpture_avg <- grades |>
 ggplot(arch_sculpture_avg, aes(x = factor(group), y = avg_grade)) +
   geom_col(fill="steel blue") 
 ```
+we can compute another graphical representation of the Average architecture
+```{r}
+average_architecture <- grades %>%
+  filter(course == "Architecture and Sculpture") %>%
+  group_by(group) %>%
+  summarise(average_grade = mean(grade, na.rm = TRUE), .groups = 'drop')
 
+print(average_architecture)
+
+ggplot(average_architecture, aes(x = group, y = average_grade)) +
+  geom_point(size = 3, color = "blue") +
+  geom_line(aes(group = 1), color = "blue", linetype = "dashed") +  
+  theme_minimal()
+```
 Question 7: Comparison
 ```{r}
 ggplot(grades, aes(x = grade, fill = factor(semester))) +
