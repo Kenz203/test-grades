@@ -1,0 +1,43 @@
+---
+title: "test-grades"
+author: "Kenza REDWANE"
+format: 
+  html:
+    code-fold: true
+---
+
+### Introduction
+
+## 1.1 Study organisation
+
+## 1.2 Data set
+
+```{r}
+#| message: false
+#| cache: false
+here::i_am("grades(graded).csv")
+library(here)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+```
+
+Question 1: Load data
+```{r}
+library(readr)
+grades <- read_delim("/Users/macbookpro/Desktop/Master/Semester One/Data Management and Programming/test-grades/grades(graded).csv",";")
+
+```
+## Simple analyses:
+
+Question 2:
+```{r}
+num_grades <- nrow(grades)
+paste("The data set contains", num_grades, "grades")
+```
+
+Question 3:
+```{r}
+
+```
+
