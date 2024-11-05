@@ -25,7 +25,7 @@ library(ggplot2)
 Question 1: Load data
 ```{r}
 library(readr)
-grades <- read_delim("/Users/macbookpro/Desktop/Master/Semester One/Data Management and Programming/test-grades/grades(graded).csv",";")
+grades <- read_csv("/Users/macbookpro/Desktop/Master/Semester One/Data Management and Programming/test-grades/grades(graded).csv")
 
 ```
 ## Simple analyses:
@@ -38,6 +38,30 @@ paste("The data set contains", num_grades, "grades")
 
 Question 3:
 ```{r}
+num_students <- grades |> distinct(id) |> nrow()
+paste("The data set contains", num_students, "students")
+```
+
+Question 4:
+```{r}
+students <- grades |> distinct(id, group)
+students |> slice_head(n = 5)
+```
+
+Question 5: 
+```{r}
+students_per_group <- students |> count(group)
+ggplot(students_per_group, aes(x = factor(group), y = n)) +
+  geom_col(fill='steel blue') +
+  labs(title = "Number of students per group", x = "Group", y = "Number of students")
+```
+
+Question 6:
+```{r}
 
 ```
 
+Question 7:
+```{r}
+
+```
