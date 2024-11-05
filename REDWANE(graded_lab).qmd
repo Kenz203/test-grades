@@ -70,12 +70,9 @@ average_architecture <- grades %>%
   filter(course == "Architecture and Sculpture") %>%
   group_by(group) %>%
   summarise(average_grade = mean(grade, na.rm = TRUE), .groups = 'drop')
-
-print(average_architecture)
-
 ggplot(average_architecture, aes(x = group, y = average_grade)) +
   geom_point(size = 3, color = "blue") +
-  geom_line(aes(group = 1), color = "blue", linetype = "dashed") +  
+  geom_line(aes(group = 1), color = "blue", linetype = "dashed") +
   theme_minimal()
 ```
 Question 7: Comparison
@@ -84,7 +81,6 @@ ggplot(grades, aes(x = grade, fill = factor(semester))) +
   geom_density(alpha = 0.5) +
   labs(fill = "Semester")
 ```
-
 ### Attendance analysis
 
 Question 8:
@@ -205,9 +201,8 @@ final_results
 Question 19: 
 ```{r}
 non_passing_high_grades <- final_results %>%
-  filter(pass == FALSE & final_grade >= 10) %>%
+  filter(pass == FALSE) %>%
   nrow()
-
 non_passing_high_grades
 ```
 
