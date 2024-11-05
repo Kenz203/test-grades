@@ -58,10 +58,64 @@ ggplot(students_per_group, aes(x = factor(group), y = n)) +
 
 Question 6:
 ```{r}
+arch_sculpture_avg <- grades |> 
+  filter(course == "Architecture and Sculpture") |> 
+  group_by(group) |> 
+  summarise(avg_grade = mean(grade, na.rm = TRUE))
 
+ggplot(arch_sculpture_avg, aes(x = factor(group), y = avg_grade)) +
+  geom_col(fill="steel blue") +
+  labs(title = "Average of grades in Architecture and Sculpture per Group", x = "Group", y = "Average of grades")
 ```
 
-Question 7:
+Question 7: Comparison
 ```{r}
+ggplot(grades, aes(x = grade, fill = factor(semester))) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Distribution of grades per semester ", 
+       x = "Grades", 
+       y = "Dennsity", 
+       fill = "Semester")
+```
+
+### Attendance analysis
+
+Question 8:
+```{r}
+grades_per_student <- grades |> 
+  group_by(id, group) |> 
+  summarise(num_grades = n())
+
+summary_stats <- grades_per_student |> 
+  summarise(min_grades = min(num_grades),
+  max_grades = max(num_grades),
+  avg_grades = mean(num_grades),
+  med_grades = median(num_grades))
+summary_stats
+```
+
+Question 9
+```{r}
+martial_grades <- grades |> 
+  filter(course == "Martial Arts and Self-Defense") |> 
+  group_by(id, group) |> 
+  summarise(num_martial_grades = n())
+martial_grades |> slice_head(n = 5)
+```
+Question 10:
+```{r}
+distribution_martial_grades <- martial_grades |> 
+  count(num_martial_grades)
+ggplot(distribution_martial_grades, aes(x = num_martial_grades, y = n)) +
+  geom_col(fill ='darkred') +
+  labs(title = "Distribution of grades in Martial Arts and Self-Defense", x = "Number of grades ", y = "Number of students")
 
 ```
+
+Question 11:
+```{r}
+ggplot(martial_grades, aes(x = factor(group), y = num_martial_grades)) +
+  geom_boxplot() +
+  labs(title = "Number of grades in Martial Arts and Self-Defense per group", x = "Group", y = "Number of de grades")
+```
+
