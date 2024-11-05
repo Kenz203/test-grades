@@ -212,7 +212,6 @@ pass_rate_per_group <- final_results %>%
   group_by(group) %>%
   summarise(pass_rate = mean(pass) * 100, .groups = 'drop')  
 pass_rate_per_group
-
 ggplot(pass_rate_per_group, aes(x = group, y = pass_rate)) +
   geom_bar(stat = "identity", fill = "skyblue") +
   theme_minimal()
