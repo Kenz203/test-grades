@@ -3,7 +3,6 @@ title: "test-grades"
 author: "Kenza REDWANE"
 format: 
   html:
-  pdf: 
     code-fold: true
 ---
 
@@ -154,7 +153,6 @@ avg_grades_per_course |>
   filter(group == strongest_corr_group) |>
   ggplot(aes(x = `Astrology and Divination`, y = `Architecture and Sculpture`)) +
   geom_point(color = "red") +
-
   theme_minimal()
 ```
 
@@ -210,6 +208,5 @@ pass_rate_per_group
 
 ggplot(pass_rate_per_group, aes(x = group, y = pass_rate)) +
   geom_bar(stat = "identity", fill = "skyblue") +
-
   theme_minimal()
 ```
