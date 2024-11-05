@@ -179,15 +179,40 @@ ggplot(final_grades, aes(x = factor(group), y = final_grade)) +
 
 Question 18: 
 ```{r}
+library(dplyr)
+final_results <- grades %>%
+  group_by(id, group) %>%
+  summarise(
+    final_grade = mean(grade, na.rm = TRUE),  
+    semester_averages = list(mean(grade)),    
+    .groups = 'drop'  ) %>%
+  mutate( average_semester = map_dbl(semester_averages, mean, na.rm = TRUE), 
+    pass = final_grade >= 5 & average_semester >= 10  
+  ) %>%
+  select(id, group, final_grade, pass)  
+final_results
+
 
 ```
 
 Question 19: 
 ```{r}
+non_passing_high_grades <- final_results %>%
+  filter(pass == FALSE & final_grade >= 10) %>%
+  nrow()
 
+non_passing_high_grades
 ```
 
 Question 20: 
 ```{r}
+pass_rate_per_group <- final_results %>%
+  group_by(group) %>%
+  summarise(pass_rate = mean(pass) * 100, .groups = 'drop')  
+pass_rate_per_group
 
+ggplot(pass_rate_per_group, aes(x = group, y = pass_rate)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+
+  theme_minimal()
 ```
