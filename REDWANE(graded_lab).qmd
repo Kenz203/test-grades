@@ -3,7 +3,7 @@ title: "test-grades"
 author: "Kenza REDWANE"
 format: 
   html:
-  pdf:
+  pdf: 
     code-fold: true
 ---
 
@@ -180,19 +180,16 @@ ggplot(final_grades, aes(x = factor(group), y = final_grade)) +
 Question 18: 
 ```{r}
 library(dplyr)
+library(purrr)
 final_results <- grades %>%
   group_by(id, group) %>%
-  summarise(
-    final_grade = mean(grade, na.rm = TRUE),  
-    semester_averages = list(mean(grade)),    
-    .groups = 'drop'  ) %>%
+  summarise(final_grade = mean(grade, na.rm = TRUE),
+            semester_averages = list(mean(grade)),  
+            .groups = 'drop'  ) %>%
   mutate( average_semester = map_dbl(semester_averages, mean, na.rm = TRUE), 
-    pass = final_grade >= 5 & average_semester >= 10  
-  ) %>%
+    pass = final_grade >= 5 & average_semester >= 10) %>%
   select(id, group, final_grade, pass)  
 final_results
-
-
 ```
 
 Question 19: 
